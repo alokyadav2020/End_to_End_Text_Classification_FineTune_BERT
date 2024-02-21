@@ -1,0 +1,17 @@
+artifacts_root: artifacts
+
+Data_Ingestion:
+  root_dir: artifacts/data_ingestion
+  local_file_path : artifacts/data_ingestion/dataset.csv
+  
+
+Data_Validaton:
+  root_dir: artifacts/data_validation
+  status_file : artifacts/data_validation/status.txt  
+  local_fiel_validation: artifacts/data_ingestion/dataset.csv
+
+Data_Transformation:
+  root_dir: artifacts/data_transformation
+  local_data_file: artifacts/data_ingestion/dataset.csv
+
+    

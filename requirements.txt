@@ -13,4 +13,13 @@ uvicorn==0.18.3
 Jinja2==3.1.2
 transformers[sentencepiece]
 flask
-# -e .
+torch
+transformers[torch]
+pymongo==4.2.0
+pymongo[srv]
+python-dotenv==0.21.0
+python-box==6.0.2
+ensure==1.0.2
+boto3
+mypy-boto3-s3
+-e .

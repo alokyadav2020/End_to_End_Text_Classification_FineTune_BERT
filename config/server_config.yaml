@@ -1,0 +1,7 @@
+MONGODB:
+  mongodb_url: "mongodb+srv://alok-ranjan:aloK_1991@cluster0.u3qomry.mongodb.net/?retryWrites=true&w=majority"
+  mongodb_name: "NLP_DATASET"
+  mongodb_collection_name: "AI_vs_HUMAN_TEXT"
+
+AWS_SERVER:
+  aws_s3_bucket_name: ""  
