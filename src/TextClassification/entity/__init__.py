@@ -26,6 +26,7 @@ class ModelTrainingConfig:
     traning_data_file: Path   
     model_check_point: str 
     model_name: str
+    tokenizer_name: str
 
 @dataclass(frozen=True)
 class TrainingArgumentConfig:
@@ -46,3 +47,7 @@ class EvaluationConfig:
     Accuracy_file: Path
     Matrix_file: Path
 
+@dataclass(frozen=True)
+class ModelPredictionConfig:
+    model_name: Path
+    tokenizer_name: Path

@@ -6,7 +6,8 @@ from src.TextClassification.entity import (DataIngestionConfig,
                                            DataTransformationConfig,
                                            ModelTrainingConfig,
                                            TrainingArgumentConfig,
-                                           EvaluationConfig
+                                           EvaluationConfig,
+                                           ModelPredictionConfig
                                            )
 
 
@@ -70,7 +71,8 @@ class ConfigurationManager:
             root_dir=config.root_dir,
             traning_data_file=config.traning_data_file,
             model_check_point= config.model_check_point,
-            model_name= config.model_name
+            model_name= config.model_name,
+            tokenizer_name= config.tokenizer_name
         )
 
         return model_trainig_config
@@ -111,6 +113,18 @@ class ConfigurationManager:
         )
 
         return evaluation_config
+    
+
+    def get_prediction_config(self)-> ModelPredictionConfig:
+        config= self.config.Model_Prediction
+
+        prediction_config = ModelPredictionConfig(
+
+            model_name= config.model_name,
+            tokenizer_name= config.tokenizer_name
+        )
+
+        return prediction_config
 
 
 

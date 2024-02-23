@@ -52,12 +52,12 @@ class ModelTraining:
     
     
 
-    # def compute_metrics(elv):
+    def compute_metrics(elv):
         
-    #     x, y = elv
-    #     preds = np.argmax(x, -1)
-    #     metric = evaluate.load("accuracy")
-    #     return metric.compute(predictions=preds, references=y)
+        x, y = elv
+        preds = np.argmax(x, -1)
+        metric = evaluate.load("accuracy")
+        return metric.compute(predictions=preds, references=y)
     
 
     def compute_metrics(eval_pred):
@@ -65,64 +65,53 @@ class ModelTraining:
         predictions = np.argmax(predictions, axis=1)
         accuracy = evaluate.load("accuracy")
         return accuracy.compute(predictions=predictions, references=labels)
+
+    def dataset(self):
+
+        dataset_dict = load_from_disk(self.config.traning_data_file)
+
+        # tiny_data = DatasetDict()
+        # tiny_data['train'] = dataset_dict['train'].shuffle(seed=1).select(range(20))
+        # tiny_data['validation'] = dataset_dict['validation'].shuffle(seed=1).select(range(10))
+        # tiny_data['test'] = dataset_dict['test'].shuffle(seed=1).select(range(10))
+        # print(tiny_data)
+        # data_encoded = tiny_data.map(self.tokenize_function, batched=True, batch_size=None)
+
+        print(dataset_dict)
+        data_encoded = dataset_dict.map(self.tokenize_function, batched=True, batch_size=None)
+
+        return data_encoded
+
         
 
     def Training_Model(self):
 
         torch.cuda.empty_cache()
 
-        dataset_dict = load_from_disk(self.config.traning_data_file)
-        tiny_data = DatasetDict()
-        tiny_data['train'] = dataset_dict['train'].shuffle(seed=1).select(range(20))
-        tiny_data['validation'] = dataset_dict['validation'].shuffle(seed=1).select(range(10))
-        tiny_data['test'] = dataset_dict['test'].shuffle(seed=1).select(range(10))
-
-
-        print(tiny_data)
-
-        data_encoded = tiny_data.map(self.tokenize_function, batched=True, batch_size=None)
-
+        data = self.dataset()
 
         model = self.load_model()
 
         training_arg = self.training_arguments()
-
 
         trainer = Trainer(
 
             model= model,
             args= training_arg,
             # compute_metrics=  self.compute_metrics,
-            train_dataset= data_encoded['train'],
-            eval_dataset= data_encoded["validation"],
+            train_dataset= data['train'],
+            eval_dataset= data["validation"],
             tokenizer= self.tokenizer
         )
 
         trainer.train()
        
         trainer.save_model(self.config.model_name)
+        self.tokenizer.save_pretrained(self.config.tokenizer_name)
 
-        pred= trainer.predict(data_encoded['test'])
-
-        
-        
-
+        pred= trainer.predict(data['test'])
 
         return trainer,pred
 
-        # Evaluate = trainer.evaluate()
-
        
-
-        # pred= trainer.predict(data_encoded['test'])
-
-        # pred
-        
-
-        # Score = accuracy_score(pred.label_ids, pred.predictions.argmax(axis=-1))
-        # print(f"Scor is : {Score}")
-
-        # df = pd.DataFrame([{"Score" : Score}])
-        # df.to_csv(self.config.root_dir)
-
 
