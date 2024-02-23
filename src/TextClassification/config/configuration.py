@@ -3,7 +3,10 @@ from src.TextClassification.logging import logger
 from src.TextClassification.utils.common import read_yaml,create_directories
 from src.TextClassification.entity import (DataIngestionConfig,
                                            DataValidationConfig,
-                                           DataTransformationConfig
+                                           DataTransformationConfig,
+                                           ModelTrainingConfig,
+                                           TrainingArgumentConfig,
+                                           EvaluationConfig
                                            )
 
 
@@ -55,6 +58,61 @@ class ConfigurationManager:
         )
 
         return data_transformation_config
+    
+
+    def get_model_training_config(self)-> ModelTrainingConfig:
+        config= self.config.Model_training
+
+        create_directories([config.root_dir])
+
+        model_trainig_config = ModelTrainingConfig(
+
+            root_dir=config.root_dir,
+            traning_data_file=config.traning_data_file,
+            model_check_point= config.model_check_point,
+            model_name= config.model_name
+        )
+
+        return model_trainig_config
+    
+
+    def get_trainingargument_config(self)-> TrainingArgumentConfig:
+        param = self.param.TrainingArguments
+
+
+        training_arument = TrainingArgumentConfig(
+
+            num_train_epochs = param.num_train_epochs,
+            learning_rate = param.learning_rate,
+            per_device_train_batch_size = param.per_device_train_batch_size,
+            per_device_eval_batch_size = param.per_device_eval_batch_size,
+            weight_decay = param.weight_decay,
+            evaluation_strategy = param.evaluation_strategy,
+            disable_tqdm = param.disable_tqdm,
+            logging_steps = param.logging_steps,
+            log_level = param.log_level,
+            optim = param.optim
+        )
+
+        return training_arument
+    
+
+    def get_evaluation_config(self)-> EvaluationConfig:
+        config= self.config.Model_Evaluation
+
+        create_directories([config.root_dir])
+
+        evaluation_config = EvaluationConfig(
+
+            root_dir= config.root_dir,
+            Accuracy_file= config.Accuracy_file,
+            Matrix_file= config.Matrix_file
+           
+        )
+
+        return evaluation_config
+
+
 
 
 
